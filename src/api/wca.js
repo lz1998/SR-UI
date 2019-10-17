@@ -29,3 +29,25 @@ export function findBestAverageResultsByPersonId(personId) {
     })
 }
 
+export function findResultsByPersonId(personId,pageNum,pageSize) {
+    return request({
+        url:'/wcaResult/findResultsByPersonId',
+        method:'get',
+        params:{
+            personId,
+            pageNum,
+            pageSize
+        }
+    })
+}
+
+export function findCompetitionById(id) {
+    return request({
+        url:'/wcaCompetition/findCompetitionById',
+        method:'get',
+        params:{
+            id
+        }
+    })
+}
+

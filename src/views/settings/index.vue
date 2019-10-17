@@ -2,12 +2,13 @@
     <div class="settings">
         <el-form>
             <el-form-item>
-                <el-button type="primary" @click="handleAddStudent">添加</el-button>
+                <el-button type="primary" @click="handleAddStudent">添加学生</el-button>
+                <el-button type="primary" @click="handleExportImportStudent">导出/导入学生</el-button>
+                <span style="margin-left: 30px;color:red">因贫穷，数据存在浏览器缓存，可能丢失，如需保留数据导出后保存到文件，使用时导入</span>
             </el-form-item>
         </el-form>
         <el-table
                 stripe
-                align="center"
                 :data="studentInfoList.filter(data=> !searchKeyword || data.name.toLowerCase().includes(searchKeyword.toLowerCase()) || data.id.toLowerCase().includes(searchKeyword.toLowerCase()))"
                 max-height="500"
                 style="width: 100%">
@@ -65,6 +66,23 @@
             </el-table-column>
         </el-table>
 
+        <el-dialog :visible.sync="exportImportDialogVisible">
+            <el-form>
+                <el-form-item>
+                    <el-button type="primary" @click="handleExportStudent">导出学生</el-button>
+                    <el-button type="primary" @click="handleImportStudent">导入学生</el-button>
+                    <span style="margin-left: 30px;color:red">没自动复制，请手动复制</span>
+                </el-form-item>
+                <el-form-item>
+                    <el-input
+                            type="textarea"
+                            :rows="15"
+                            placeholder="请输入内容"
+                            v-model="exportImportStudentText">
+                    </el-input>
+                </el-form-item>
+            </el-form>
+        </el-dialog>
         <!--添加、编辑对话框-->
         <el-dialog :visible.sync="studentFormDialogVisible" :title="isAddOperation?'新增学生':'编辑学生'" width="50%">
             <el-form :model="studentForm">
@@ -77,8 +95,8 @@
                             type="monthrange"
                             value-format="yyyy-MM"
                             range-separator="至"
-                            start-placeholder="开始月份"
-                            end-placeholder="结束月份">
+                            start-placeholder="入学月份"
+                            end-placeholder="退学月份">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item>
@@ -113,10 +131,23 @@
                 studentInfoList: [],
                 searchKeyword: '',
                 studentDetailDialogVisible: false,
-                studentDetail: ''
+                studentDetail: '',
+                exportImportDialogVisible:false,
+                exportImportStudentText:''
             }
         },
         methods: {
+            handleExportImportStudent(){
+                this.exportImportDialogVisible=true
+                this.exportImportStudentText=''
+            },
+            handleExportStudent(){
+                this.exportImportStudentText=JSON.stringify(this.studentInfoList)
+            },
+            handleImportStudent(){
+                this.studentInfoList=JSON.parse(this.exportImportStudentText)
+                this.saveStudentInfoList()
+            },
             handleAddStudent() {
                 this.isAddOperation = true
                 this.studentFormDialogVisible = true

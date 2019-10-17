@@ -1,6 +1,7 @@
 <template>
   <div class="home">
-    home
+    闲着没事xjb写的社团纪录统计工具<br/>
+
   </div>
 </template>
 
