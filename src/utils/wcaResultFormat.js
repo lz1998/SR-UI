@@ -40,9 +40,9 @@ export default function (result,eventId) {
             if(sec<10){
                 sec="0"+sec.toString()
             }
-            resultStr=`${min}:${sec}:${msec}`
+            resultStr=`${min}:${sec}.${msec}`
         }else {
-            resultStr=`${sec}:${msec}`
+            resultStr=`${sec}.${msec}`
         }
     }
     return resultStr;

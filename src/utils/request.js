@@ -3,7 +3,7 @@ import {Message} from "element-ui";
 
 const service = axios.create({
     // baseURL:process.env.BASE_URL
-    baseURL: "http://apiwca.lz1998.xin/"
+    baseURL: "http://wcads.lz1998.xin/"
 });
 
 // 添加响应拦截器
