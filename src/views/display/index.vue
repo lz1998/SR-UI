@@ -28,7 +28,7 @@
                     prop="singleResult"
                     label="单次成绩"
                     align="center"
-                    width="150">
+                    width="300">
             </el-table-column>
             <el-table-column
                     prop="averageName"
@@ -40,7 +40,7 @@
                     prop="averageResult"
                     label="平均成绩"
                     align="center"
-                    width="150">
+                    width="300">
             </el-table-column>
         </el-table>
     </div>
@@ -48,6 +48,7 @@
 
 <script>
     import {findResultsByPersonId, findCompetitionById} from '@/api/wca.js'
+    import {getCompetitionInfo} from '@/api/cubing.js'
     import wcaResultFormat from '@/utils/wcaResultFormat.js'
 
     export default {
@@ -184,6 +185,15 @@
                             this.competitionMap[competitionId] = res.data
                             resolve(competitionId)
                         })
+                    }).then(competitionId=>{
+                        // TODO 粗饼查询有问题
+                        let competitionAlias=this.competitionMap[competitionId].cellName.replace(/ /g, '-').replace(/\'/g, '')
+
+                        getCompetitionInfo(competitionAlias).then(res=>{
+                            console.log(competitionId)
+                            console.log(competitionAlias)
+                            console.log(res)
+                        })
                     })
                 })
                 await Promise.all(promiseList)
@@ -277,12 +287,12 @@
                     if (this.schoolRecordMap[eventId].single) {
                         result = this.schoolRecordMap[eventId].single
                         eventRecord.singleName = this.studentInfoMap[result.personId].name
-                        eventRecord.singleResult = wcaResultFormat(result.best, eventId)
+                        eventRecord.singleResult = wcaResultFormat(result.best, eventId)+" "+result.competitionId
                     }
                     if (this.schoolRecordMap[eventId].average) {
                         result = this.schoolRecordMap[eventId].average
                         eventRecord.averageName = this.studentInfoMap[result.personId].name
-                        eventRecord.averageResult = wcaResultFormat(result.average, eventId)
+                        eventRecord.averageResult = wcaResultFormat(result.average, eventId)+" "+result.competitionId
                     }
                     this.schoolRecordTable.push(eventRecord)
                 })
@@ -294,6 +304,8 @@
         },
         mounted() {
             this.schoolRecordTable = JSON.parse(localStorage.getItem("schoolRecordTable"))
+            // getCompetitionInfo("China-Championship-2015").then(res=>{
+            // })
 
         }
     }

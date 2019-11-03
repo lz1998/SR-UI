@@ -22,7 +22,7 @@ export default function (result,eventId) {
         let mbfAttempted=mbfSolved+mbfMissed;
         let mbfTime=parseInt(result/100);
         let mbfSec=mbfTime%10000;
-        let mbfMin=mbfSec/60;
+        let mbfMin=parseInt(mbfSec/60);
         mbfSec%=60;
         if(mbfSec<10){
             mbfSec="0"+mbfSec.toString()
